@@ -1,0 +1,47 @@
+{
+  "name": "trackian",
+  "displayName": "Trackian",
+  "version": "2.0.0",
+  "description": "Ask why sales moved, which ads waste money and what to fix next, from your live GA4, Google Ads, Meta Ads, TikTok Ads, Search Console and store data.",
+  "author": {
+    "name": "Trackian",
+    "email": "support@trackian.com"
+  },
+  "homepage": "https://trackian.com",
+  "repository": "https://github.com/trackian/cursor-plugin",
+  "license": "MIT",
+  "logo": "assets/logo.png",
+  "keywords": [
+    "marketing",
+    "analytics",
+    "marketing-analytics",
+    "anomaly-detection",
+    "ga4",
+    "google-analytics",
+    "google-ads",
+    "meta-ads",
+    "facebook-ads",
+    "tiktok-ads",
+    "search-console",
+    "merchant-center",
+    "google-tag-manager",
+    "shopify",
+    "woocommerce",
+    "magento",
+    "ecommerce",
+    "ppc",
+    "roas",
+    "attribution",
+    "reporting",
+    "mcp"
+  ],
+  "category": "integrations",
+  "tags": [
+    "marketing",
+    "analytics",
+    "ads",
+    "ecommerce",
+    "mcp"
+  ],
+  "mcpServers": "./mcp.json"
+}
