@@ -1,52 +1,70 @@
-# Trackian MCP Plugin for Cursor
+# Trackian for Cursor
 
-This plugin connects Cursor's AI to your Trackian Marketing Analytics data via the Model Context Protocol (MCP). It allows Cursor's Composer and Chat to seamlessly query your marketing performance, investigate anomalies, and generate insights directly inside your IDE.
+Ask Cursor why sales moved, which ads waste money and what to fix next. The agent answers from your live Trackian data: GA4, Google Ads, Meta Ads, TikTok Ads, Search Console, Merchant Center, Tag Manager and your Shopify, WooCommerce or Magento store, plus the anomalies Trackian Sentinel detects every night.
 
-## Requirements
+You need a Trackian account. If you don't have one, the sign-in page lets you create one, or start at [trackian.com](https://trackian.com).
 
-To use this plugin, you must have an active Trackian account. If you don't have one yet, [register at ai.trackian.com](https://ai.trackian.com) to get started.
+## What's in the plugin
 
-## Installation
+- **MCP server** `trackian` at `https://api.trackian.app/mcp`. You sign in through your browser with your Trackian account (OAuth), so there's no API key to paste.
+- **Skills**
+  - `trackian`: how to answer marketing and sales questions from Trackian data (evidence, currencies, previews before changes).
+  - `trackian-get-started`: sign in, see your projects, save how you want answers and get a first answer.
+- **Commands.** Each command fetches its current steps from Trackian with `get_command`, so a workflow improves without a plugin update.
 
-1. Clone or download this plugin repository to your local machine.
-2. Get your `tmcp_` API key from the Trackian Settings page.
-3. In Cursor, open **Settings** > **Features** > **MCP**.
-4. Click **+ Add New MCP Server**.
-5. Configure the server with the following details:
-   - **Name**: `trackian`
-   - **Type**: `command`
-   - **Command**: `node /path/to/trackian-cursor-plugin/mcp-bridge.mjs` (replace with the actual absolute path to the downloaded folder)
-6. Under the new server, add an Environment Variable:
-   - **Key**: `TRACKIAN_MCP_TOKEN`
-   - **Value**: `YOUR_TMCP_TOKEN_HERE` (replace with your actual API key)
+| Command | What it does |
+| --- | --- |
+| `/trackian-setup` (alias `/trackian-start`) | Sign in, see projects and platforms, choose how answers are written |
+| `/trackian-investigate` | Find what changed in a project and why |
+| `/trackian-deep-dive` | Explain one known incident end to end |
+| `/trackian-weekly-review` | The week in one summary |
+| `/trackian-briefing` | What happened across all projects |
+| `/trackian-opportunities` | Where to grow |
+| `/trackian-pacing` | Are this month's targets on track |
+| `/trackian-ads-audit` | Paid-media health check across ad platforms: cut, fix, scale |
+| `/trackian-creative-fatigue` | Facebook and Instagram ads that are wearing out |
+| `/trackian-creative-review` | What each ad shows and says, and what drives results |
+| `/trackian-search-terms` | Google Ads searches wasting money, and negatives to add |
+| `/trackian-blended` | What all the advertising together made |
+| `/trackian-product-waste` | Products wasting Shopping and Performance Max spend |
+| `/trackian-keyword-health` | Dead keywords, lost impression share, duplicates |
+| `/trackian-funnel-dropoff` | Where the Meta funnel leaks, per ad set |
+| `/trackian-attribution-gap` | What the platforms claim vs what analytics saw |
+| `/trackian-landing-pages` | Paid landing pages that convert badly or aren't tracked |
+| `/trackian-geo-waste` | Countries and regions that spend without results |
+| `/trackian-recommendations` | Google's and Meta's own recommendations, filtered |
+| `/trackian-merchant` | Review and fix a Google Merchant Center feed |
+| `/trackian-gtm` | Change a Google Tag Manager setup from a plain-words request |
+| `/trackian-profit-metrics` | Gross profit, margin and profit on ad spend from product costs |
+| `/trackian-set-targets` | Set the monthly KPI targets |
+| `/trackian-setup-project` | Improve a project's alerts, KPIs, custom metrics and funnels |
+| `/trackian-dashboard` | Build or edit a custom Trackian dashboard |
+| `/trackian-report` | A branded report saved as HTML |
 
-## Usage & Rules Included
+- **Agent** `marketing-analyst`: for multi-step analysis when the main chat only needs the conclusion. It reads and never changes anything.
 
-This plugin includes custom Cursor Rules (`.cursor/rules/*.mdc`) that teach Cursor exactly how to use the Trackian tools. To use them, just ask Cursor's Composer or Chat:
+## Install
 
-*   **"Generate a Trackian channel performance report for project X from Y to Z"**: Cursor will use `runGa4Report`, `getFacebookMetrics`, `getMetricsFromGads`, and `getMetricFromGSC` to build a comprehensive executive summary.
-*   **"Investigate the Trackian anomaly for project X on metric Y on date Z"**: Cursor will act as a Sentinel Investigator, following a strict 5-step diagnostic protocol to find the root cause.
-*   **"Perform a deep data analysis on project X regarding Y"**: Cursor will use natural language data querying to pull raw marketing data and synthesize actionable insights.
+1. Install **Trackian** from the Cursor marketplace.
+2. In Cursor, open **Customize** > **MCPs**, find **trackian** and click **Authenticate**. Your browser opens a Trackian page; sign in or create an account, and you're sent back to Cursor.
+3. In chat, run `/trackian-setup`, or just ask "why did sales dip last Tuesday?".
 
-## Tools Included
+To try a local copy, clone this repository into `~/.cursor/plugins/local/trackian` and run **Developer: Reload Window**.
 
-The plugin exposes the following MCP tools directly to Cursor:
+## Changes need your yes
 
-*   `runGa4Report`: Pull GA4 metrics for a project and date range — traffic, sessions, conversions, revenue, and funnel events.
-*   `getFacebookMetrics`: Pull Facebook Ads time-series metrics — spend, impressions, CPM, frequency, reach, and CTR.
-*   `facebookCampaignStatus`: Check Facebook Ads campaign status (ACTIVE/PAUSED) along with daily budget, lifetime budget, and budget remaining.
-*   `getMetricFromGSC`: Pull Google Search Console time-series metrics — clicks, impressions, average position, and CTR.
-*   `inspectGscUrl`: Check the Google index status of a URL on the project's verified Search Console property.
-*   `getMetricsFromGads`: Pull Google Ads time-series metrics — cost, CPC, impressions, clicks, and conversions.
-*   `googleAdsQuery`: Run a custom GAQL query against Google Ads for anything the other tools don't cover — bid strategy, impression share, keyword quality, and more.
-*   `googleAdsCampaignStatus`: Check Google Ads campaign status (ENABLED/PAUSED) and daily budgets.
-*   `whatChanged`: Cross-platform "what changed?" dimensional analysis — identifies which campaigns, products, keywords, landing pages, ads, or cities drove a metric move.
-*   `listMacroFactors`: List cross-cutting macro events (algorithm updates, platform changes) overlapping a date range, to rule them in or out as causes.
-*   `getSentinelMetrics`: Get Trackian Sentinel's live-recomputed metrics and active alerts for a project on a specific date.
-*   `listSentinelAlerts`: List all Sentinel alerts firing on a project across a date window.
-*   `getSentinelIncidentDetails`: Drill into a specific Sentinel incident — hypotheses, evidence, and affected metrics.
-*   `getGuardianHealthSummary`: Rolled-up site health for a project — uptime, page speed, and GSC URL inspection.
-*   `listGuardianLogs`: Raw Guardian log entries for a project — site uptime, page speed, GSC inspections, and more.
-*   `runDataQuery`: Ask a natural-language question of the project's data warehouse, or run a custom SQL query directly.
-*   `whoAmI`: Show which Trackian account and company the current API key belongs to.
-*   `listProjects`: List every project accessible with the current API key.
+Most changes are two-step. The first call returns a preview and changes nothing. The agent shows you the before and after, and applies the change only after you confirm. The few tools that apply in one call say so in their description, and the agent asks you first. Changes to live ad campaigns, and to WooCommerce or Magento products and orders, are off for a new connection until an account owner turns them on in Trackian under Settings > AI Agent Setup.
+
+## Where the plugin keeps files
+
+- `~/.trackian/profile.md` holds your answer preferences (language, detail level, projects to watch). `/trackian-setup` writes it.
+- `trackian-reports/` in your workspace holds the reports you generate.
+
+## Support
+
+- Help: [help.trackian.com](https://help.trackian.com) or support@trackian.com
+- [Privacy policy](https://trackian.com/privacy-center/privacy-policy/) and [terms](https://trackian.com/privacy-center/terms-and-conditions/)
+
+## License
+
+MIT

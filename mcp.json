@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "trackian": {
+      "type": "http",
+      "url": "https://api.trackian.app/mcp"
+    }
+  }
+}
